@@ -1,2 +1,2 @@
-# rust-htmlx-starter
+# rust-htmx-starter
 This is starter admin application based on rust and htmlx
