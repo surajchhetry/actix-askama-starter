@@ -3,6 +3,8 @@ name = "rust-htmlx-starter"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
+actix-web = "4"
+handlebars = {version = "4.3.7", features = ["dir_source"] }
+serde_json = "1.0.103"
+tera = "1.19.0"
