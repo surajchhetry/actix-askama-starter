@@ -6,10 +6,9 @@ use serde_json::json;
 async fn main() -> std::io::Result<()> {
     let mut handlebars = Handlebars::new();
     handlebars
-        .register_templates_directory(".html", "./static/templates")
+        .register_templates_directory(".html", "./static")
         .unwrap();
     let handlebars_ref = web::Data::new(handlebars);
-
 
     HttpServer::new(move || {
         App::new()
