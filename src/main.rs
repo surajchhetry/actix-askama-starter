@@ -1,3 +1,4 @@
+use actix_files::Files;
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
 use handlebars::Handlebars;
 use serde_json::json;
@@ -13,29 +14,39 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .app_data(handlebars_ref.clone())
-            .service(index)
-            .service(echo)
-            .route("/hey", web::get().to(manual_hello))
+            .route("/", web::get().to(login))
+            .route("/home", web::get().to(home))
+            .route("/home", web::post().to(home))
+            .route("/table-basic", web::get().to(table_basic))
+            .route("/table-full", web::get().to(table_full))
+            .service(Files::new("/css", "./static/css"))
+            .service(Files::new("/js", "./static/js"))
     })
     .bind(("127.0.0.1", 8080))?
     .run()
     .await
 }
 
-#[get("/")]
-async fn index(hb: web::Data<Handlebars<'_>>) -> HttpResponse {
-    let data = json!({
-        "name": "Handlebars"
-    });
-    let body = hb.render("index", &data).unwrap();
+async fn login(hb: web::Data<Handlebars<'_>>) -> HttpResponse {
+    let data = json!({});
+    let body = hb.render("login", &data).unwrap();
     HttpResponse::Ok().body(body)
 }
 
-#[post("/echo")]
-async fn echo(req_body: String) -> impl Responder {
-    HttpResponse::Ok().body(req_body)
+async fn home(hb: web::Data<Handlebars<'_>>) -> HttpResponse {
+    let data = json!({});
+    let body = hb.render("home", &data).unwrap();
+    HttpResponse::Ok().body(body)
 }
 
-async fn manual_hello() -> impl Responder {
-    HttpResponse::Ok().body("Hey there!")
+async fn table_basic(hb: web::Data<Handlebars<'_>>) -> HttpResponse {
+    let data = json!({});
+    let body = hb.render("table-basic", &data).unwrap();
+    HttpResponse::Ok().body(body)
+}
+
+async fn table_full(hb: web::Data<Handlebars<'_>>) -> HttpResponse {
+    let data = json!({});
+    let body = hb.render("table-data-table", &data).unwrap();
+    HttpResponse::Ok().body(body)
 }
