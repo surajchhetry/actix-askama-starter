@@ -6,6 +6,16 @@ edition = "2021"
 [dependencies]
 actix-web = "4"
 actix-files = "0.6.2"
-handlebars = {version = "4.3.7", features = ["dir_source"] }
-serde_json = "1.0.103"
-tera = "1.19.0"
+#handlebars = {version = "4.3.7", features = ["dir_source"] }
+# in section [dependencies]
+
+#serde_json = "1.0.107"
+#tera = "1.19.0"
+serde = { version = "1.0.188", features = ["derive"] }
+askama = "0.12.1"
+askama_actix = "0.14.0"
+
+[package.metadata.askama]
+dir = "static"
+
+

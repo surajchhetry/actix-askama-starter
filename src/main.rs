@@ -1,24 +1,53 @@
 use actix_files::Files;
-use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
-use handlebars::Handlebars;
-use serde_json::json;
+use actix_web::cookie::Cookie;
+use actix_web::{http, web, App, HttpResponse, HttpServer};
+use askama::Template;
+use serde::Deserialize;
+
+#[derive(Deserialize, Template)]
+#[template(path = "login.html")]
+struct LoginForm {
+    username: String,
+    password: String,
+    error_message: Option<String>,
+}
+
+impl LoginForm {
+    pub fn new() -> Self {
+        LoginForm {
+            username: "".to_string(),
+            password: "".to_string(),
+            error_message: None,
+        }
+    }
+}
+
+#[derive(Template)]
+#[template(path = "secured/template/base.html")]
+struct BaseTemplate;
+
+#[derive(Template)]
+#[template(path = "secured/views/home.html")]
+struct HomeTemplate;
+
+#[derive(Template)]
+#[template(path = "secured/views/users/search.html")]
+struct UsersTemplate;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let mut handlebars = Handlebars::new();
-    handlebars
-        .register_templates_directory(".html", "./static")
-        .unwrap();
-    let handlebars_ref = web::Data::new(handlebars);
-
     HttpServer::new(move || {
         App::new()
-            .app_data(handlebars_ref.clone())
-            .route("/", web::get().to(login))
+            .service(
+                web::resource("/")
+                    .route(web::get().to(login))
+                    .route(web::post().to(authenticate)),
+            )
             .route("/home", web::get().to(home))
-            .route("/home", web::post().to(home))
-            .route("/table-basic", web::get().to(table_basic))
-            .route("/table-full", web::get().to(table_full))
+            .route("/logout", web::get().to(logout))
+            // users routes
+            .service(web::resource("/users").route(web::get().to(users)))
+            // static resource
             .service(Files::new("/css", "./static/css"))
             .service(Files::new("/js", "./static/js"))
     })
@@ -26,12 +55,60 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
+/*
 
 async fn login(hb: web::Data<Handlebars<'_>>) -> HttpResponse {
-    let data = json!({});
+    let data = json!({"name":"Rust-handlebar-Htmlx"});
     let body = hb.render("login", &data).unwrap();
     HttpResponse::Ok().body(body)
 }
+*/
+async fn login() -> HttpResponse {
+    println!(" showing login page ....");
+    let s = LoginForm::new().render().unwrap();
+    HttpResponse::Ok().body(s)
+}
+
+async fn logout() -> HttpResponse {
+    println!(" logout  ....");
+    HttpResponse::SeeOther()
+        .insert_header((http::header::LOCATION, "/"))
+        .finish()
+}
+
+async fn authenticate(form: web::Form<LoginForm>) -> HttpResponse {
+    println!("processing authentication .... username: {}", form.username);
+    if form.username == "ram" {
+        HttpResponse::SeeOther()
+            .cookie(
+                Cookie::build("my_auth_cookie", "SomeValue")
+                    .http_only(true) // for security
+                    .finish(),
+            )
+            .insert_header((http::header::LOCATION, "/home"))
+            .finish()
+    } else {
+        let s = LoginForm {
+            username: form.username.clone(),
+            password: "".to_string(),
+            error_message: Some("Invalid credentials".to_string()),
+        }
+        .render()
+        .unwrap();
+        HttpResponse::Ok().body(s)
+    }
+}
+
+async fn home() -> HttpResponse {
+    let s = HomeTemplate.render().unwrap();
+    HttpResponse::Ok().body(s)
+}
+
+async fn users() -> HttpResponse {
+    let s = UsersTemplate.render().unwrap();
+    HttpResponse::Ok().body(s)
+}
+/*
 
 async fn home(hb: web::Data<Handlebars<'_>>) -> HttpResponse {
     let data = json!({});
@@ -50,3 +127,4 @@ async fn table_full(hb: web::Data<Handlebars<'_>>) -> HttpResponse {
     let body = hb.render("table-data-table", &data).unwrap();
     HttpResponse::Ok().body(body)
 }
+*/
