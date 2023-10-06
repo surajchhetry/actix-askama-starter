@@ -2,7 +2,7 @@
 
 {% block title %}
 <div>
-    <h1><i class="bi bi-person-add"></i> New User Setup</h1>
+    <h1><i class="bi bi-person-add"></i> Users &raquo New User Setup</h1>
     <p>Adding new user to the system</p>
 </div>
 
@@ -10,11 +10,73 @@
 
 {% block content %}
 <div class="row">
-    <div class="col-md-12">
-        <div class="tile">
-            <div class="tile-body">Create a beautiful dashboard</div>
+    <div class="tile">
+        <div class="col-md-12">
+            <div class="tile-body">
+                <form class="form-horizontal">
+                    <div class="mb-3 row"></div>
+                    <div class="mb-3 row">
+                        <label class="form-label col-md-3">Name</label>
+                        <div class="col-md-8">
+                            <input class="form-control" type="text" placeholder="Enter full name">
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="form-label col-md-3">Email</label>
+                        <div class="col-md-8">
+                            <input class="form-control col-md-8" type="email" placeholder="Enter email address">
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="form-label col-md-3">Address</label>
+                        <div class="col-md-8">
+                            <textarea class="form-control" rows="4" placeholder="Enter your address"></textarea>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="form-label col-md-3">Gender</label>
+                        <div class="col-md-9">
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="radio" name="gender">Male
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="radio" name="gender">Female
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="form-label col-md-3">Identity Proof</label>
+                        <div class="col-md-8">
+                            <input class="form-control" type="file">
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <div class="col-md-8 col-md-offset-3">
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox">I accept the terms and conditions
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="tile-footer">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-3">
+                        <button class="btn btn-primary" type="button"><i class="bi bi-check-circle-fill me-2"></i>Submit
+                        </button>&nbsp;&nbsp;&nbsp;<a class="btn btn-secondary" href="/users"><i
+                            class="bi bi-x-circle-fill me-2"></i>Cancel</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
 </div>
 
 {% endblock %}
