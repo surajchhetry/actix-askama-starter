@@ -27,8 +27,8 @@ impl LoginForm {
 struct BaseTemplate;
 
 #[derive(Template)]
-#[template(path = "secured/views/home.html")]
-struct HomeTemplate;
+#[template(path = "secured/views/dashboard.html")]
+struct DashboardTemplate;
 
 #[derive(Template)]
 #[template(path = "secured/views/users/search.html")]
@@ -43,7 +43,7 @@ async fn main() -> std::io::Result<()> {
                     .route(web::get().to(login))
                     .route(web::post().to(authenticate)),
             )
-            .route("/home", web::get().to(home))
+            .route("/dashboard", web::get().to(dashboard))
             .route("/logout", web::get().to(logout))
             // users routes
             .service(web::resource("/users").route(web::get().to(users)))
@@ -55,14 +55,7 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-/*
 
-async fn login(hb: web::Data<Handlebars<'_>>) -> HttpResponse {
-    let data = json!({"name":"Rust-handlebar-Htmlx"});
-    let body = hb.render("login", &data).unwrap();
-    HttpResponse::Ok().body(body)
-}
-*/
 async fn login() -> HttpResponse {
     println!(" showing login page ....");
     let s = LoginForm::new().render().unwrap();
@@ -85,7 +78,7 @@ async fn authenticate(form: web::Form<LoginForm>) -> HttpResponse {
                     .http_only(true) // for security
                     .finish(),
             )
-            .insert_header((http::header::LOCATION, "/home"))
+            .insert_header((http::header::LOCATION, "/dashboard"))
             .finish()
     } else {
         let s = LoginForm {
@@ -99,8 +92,8 @@ async fn authenticate(form: web::Form<LoginForm>) -> HttpResponse {
     }
 }
 
-async fn home() -> HttpResponse {
-    let s = HomeTemplate.render().unwrap();
+async fn dashboard() -> HttpResponse {
+    let s = DashboardTemplate.render().unwrap();
     HttpResponse::Ok().body(s)
 }
 
@@ -108,23 +101,3 @@ async fn users() -> HttpResponse {
     let s = UsersTemplate.render().unwrap();
     HttpResponse::Ok().body(s)
 }
-/*
-
-async fn home(hb: web::Data<Handlebars<'_>>) -> HttpResponse {
-    let data = json!({});
-    let body = hb.render("home", &data).unwrap();
-    HttpResponse::Ok().body(body)
-}
-
-async fn table_basic(hb: web::Data<Handlebars<'_>>) -> HttpResponse {
-    let data = json!({});
-    let body = hb.render("table-basic", &data).unwrap();
-    HttpResponse::Ok().body(body)
-}
-
-async fn table_full(hb: web::Data<Handlebars<'_>>) -> HttpResponse {
-    let data = json!({});
-    let body = hb.render("table-data-table", &data).unwrap();
-    HttpResponse::Ok().body(body)
-}
-*/

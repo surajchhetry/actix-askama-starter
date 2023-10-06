@@ -16,7 +16,7 @@
 </head>
 <body class="app sidebar-mini">
 <!-- Navbar-->
-<header class="app-header"><a class="app-header__logo" href="/home">Admin App</a>
+<header class="app-header"><a class="app-header__logo" href="/dashboard">Admin App</a>
     <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar"
                                     aria-label="Hide Sidebar"></a>
     <!-- Navbar Right Menu-->
@@ -68,7 +68,7 @@
         </div>
     </div>
     <ul class="app-menu">
-        <li><a class="app-menu__item" href="/home"><i class="app-menu__icon bi bi-speedometer"></i><span
+        <li><a class="app-menu__item" href="/dashboard"><i class="app-menu__icon bi bi-speedometer"></i><span
                 class="app-menu__label">Dashboard</span></a></li>
         <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i
                 class="app-menu__icon bi bi-laptop"></i><span class="app-menu__label">Users</span><i
@@ -131,13 +131,7 @@
         {% block title %}{% endblock %}
 
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="tile">
-                {% block content %}{% endblock %}
-            </div>
-        </div>
-    </div>
+    {% block content %}{% endblock %}
 </main>
 <!-- Essential javascripts for application to work-->
 <script src="js/jquery-3.7.0.min.js"></script>
