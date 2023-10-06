@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Main CSS-->
-    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
     <!-- Font-icon css-->
     <link rel="stylesheet" type="text/css"
           href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
@@ -70,73 +70,31 @@
     <ul class="app-menu">
         <li><a class="app-menu__item" href="/dashboard"><i class="app-menu__icon bi bi-speedometer"></i><span
                 class="app-menu__label">Dashboard</span></a></li>
-        <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i
-                class="app-menu__icon bi bi-laptop"></i><span class="app-menu__label">Users</span><i
+
+        <li><a class="app-menu__item" href="/users"><i class="app-menu__icon bi bi-people-fill"></i><span
+                class="app-menu__label">Users</span></a></li>
+<!--
+        <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview">
+            <i class="app-menu__icon bi bi-people-fill"></i><span class="app-menu__label">Some Menu</span><i
                 class="treeview-indicator bi bi-chevron-right"></i></a>
             <ul class="treeview-menu">
-                <li><a class="treeview-item" href="/users"><i class="icon bi bi-circle-fill"></i>
+                <li><a class="treeview-item" href="/users"><i class="icon bi bi-search"></i>
                     Search</a></li>
-                <li><a class="treeview-item" href="https://icons.getbootstrap.com/" target="_blank" rel="noopener"><i
-                        class="icon bi bi-circle-fill"></i> Font Icons</a></li>
-                <li><a class="treeview-item" href="ui-cards.html"><i class="icon bi bi-circle-fill"></i> Cards</a></li>
-                <li><a class="treeview-item" href="widgets.html"><i class="icon bi bi-circle-fill"></i> Widgets</a></li>
             </ul>
         </li>
-        <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i
-                class="app-menu__icon bi bi-ui-checks"></i><span class="app-menu__label">Forms</span><i
-                class="treeview-indicator bi bi-chevron-right"></i></a>
-            <ul class="treeview-menu">
-                <li><a class="treeview-item" href="form-components.html"><i class="icon bi bi-circle-fill"></i> Form
-                    Components</a></li>
-                <li><a class="treeview-item" href="form-samples.html"><i class="icon bi bi-circle-fill"></i> Form
-                    Samples</a></li>
-            </ul>
-        </li>
-        <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i
-                class="app-menu__icon bi bi-table"></i><span class="app-menu__label">Tables</span><i
-                class="treeview-indicator bi bi-chevron-right"></i></a>
-            <ul class="treeview-menu">
-                <li><a class="treeview-item" href="/table-basic"><i class="icon bi bi-circle-fill"></i> Basic Tables</a>
-                </li>
-                <li><a class="treeview-item" href="/table-full"><i class="icon bi bi-circle-fill"></i> Data
-                    Tables</a></li>
-            </ul>
-        </li>
-        <li class="treeview is-expanded"><a class="app-menu__item" href="#" data-toggle="treeview"><i
-                class="app-menu__icon bi bi-file-earmark"></i><span class="app-menu__label">Pages</span><i
-                class="treeview-indicator bi bi-chevron-right"></i></a>
-            <ul class="treeview-menu">
-                <li><a class="treeview-item active" href="blank-page.html"><i class="icon bi bi-circle-fill"></i> Blank
-                    Page</a></li>
-                <li><a class="treeview-item" href="page-login.html"><i class="icon bi bi-circle-fill"></i> Login
-                    Page</a></li>
-                <li><a class="treeview-item" href="page-lockscreen.html"><i class="icon bi bi-circle-fill"></i>
-                    Lockscreen Page</a></li>
-                <li><a class="treeview-item" href="page-user.html"><i class="icon bi bi-circle-fill"></i> User Page</a>
-                </li>
-                <li><a class="treeview-item" href="page-invoice.html"><i class="icon bi bi-circle-fill"></i> Invoice
-                    Page</a></li>
-                <li><a class="treeview-item" href="page-mailbox.html"><i class="icon bi bi-circle-fill"></i> Mailbox</a>
-                </li>
-                <li><a class="treeview-item" href="page-error.html"><i class="icon bi bi-circle-fill"></i> Error
-                    Page</a></li>
-            </ul>
-        </li>
-        <li><a class="app-menu__item" href="docs.html"><i class="app-menu__icon bi bi-code-square"></i><span
-                class="app-menu__label">Docs</span></a></li>
+        -->
     </ul>
 </aside>
-<main class="app-content">
+<main class="app-content" id="main-content">
     <div class="app-title">
         {% block title %}{% endblock %}
-
     </div>
     {% block content %}{% endblock %}
 </main>
 <!-- Essential javascripts for application to work-->
-<script src="js/jquery-3.7.0.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/main.js"></script>
+<script src="/js/jquery-3.7.0.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
 
 <!-- Page specific javascripts-->
 {% block scripts %}{% endblock %}

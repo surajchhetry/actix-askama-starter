@@ -34,6 +34,10 @@ struct DashboardTemplate;
 #[template(path = "secured/views/users/search.html")]
 struct UsersTemplate;
 
+#[derive(Template)]
+#[template(path = "secured/views/users/new-user.html")]
+struct NewUserTemplate;
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
@@ -46,7 +50,11 @@ async fn main() -> std::io::Result<()> {
             .route("/dashboard", web::get().to(dashboard))
             .route("/logout", web::get().to(logout))
             // users routes
-            .service(web::resource("/users").route(web::get().to(users)))
+            .service(web::resource("/users")
+                .route(web::get().to(users)))
+            .service(web::resource("/users/new-user")
+                .route(web::get().to(user_new))
+            )
             // static resource
             .service(Files::new("/css", "./static/css"))
             .service(Files::new("/js", "./static/js"))
@@ -99,5 +107,10 @@ async fn dashboard() -> HttpResponse {
 
 async fn users() -> HttpResponse {
     let s = UsersTemplate.render().unwrap();
+    HttpResponse::Ok().body(s)
+}
+
+async fn user_new() -> HttpResponse {
+    let s = NewUserTemplate.render().unwrap();
     HttpResponse::Ok().body(s)
 }
