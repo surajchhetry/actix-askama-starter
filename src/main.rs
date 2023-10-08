@@ -1,6 +1,10 @@
+mod middlewares;
+
 use actix_files::Files;
 use actix_web::cookie::Cookie;
-use actix_web::{http, web, App, HttpResponse, HttpServer};
+use actix_web::{guard, http, web, App, HttpResponse, HttpServer, Error, HttpRequest};
+use actix_web::dev::{Service, ServiceRequest, Transform};
+use actix_web::error::ErrorInternalServerError;
 use askama::Template;
 use serde::Deserialize;
 
@@ -38,10 +42,18 @@ struct UsersTemplate;
 #[template(path = "secured/views/users/new-user.html")]
 struct NewUserTemplate;
 
+#[derive(Template)]
+#[template(path = "errors/404.html")]
+struct NotFoundTemplate;
+
+
+
+// middleware
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
+            .wrap(middlewares::InternalServerErrorMiddleware)
             .service(
                 web::resource("/")
                     .route(web::get().to(login))
@@ -50,24 +62,32 @@ async fn main() -> std::io::Result<()> {
             .route("/dashboard", web::get().to(dashboard))
             .route("/logout", web::get().to(logout))
             // users routes
-            .service(web::resource("/users")
-                .route(web::get().to(users)))
-            .service(web::resource("/users/new-user")
-                .route(web::get().to(user_new))
-            )
+            .service(web::resource("/users").route(web::get().to(users)))
+            .service(web::resource("/users/new-user").route(web::get().to(user_new)))
             // static resource
             .service(Files::new("/css", "./static/css"))
             .service(Files::new("/js", "./static/js"))
+            // error handlers
+            .default_service(  web::to(resource_not_found))
+
+
     })
     .bind(("127.0.0.1", 8080))?
     .run()
     .await
 }
 
-async fn login() -> HttpResponse {
+async fn resource_not_found(_req: HttpRequest) -> Result<HttpResponse, Error> {
+    let s = NotFoundTemplate.render().unwrap();
+    Ok(HttpResponse::NotFound().content_type("text/html").body(s))
+}
+
+
+
+async fn login() -> Result<HttpResponse, Error> {
     println!(" showing login page ....");
     let s = LoginForm::new().render().unwrap();
-    HttpResponse::Ok().body(s)
+    Ok(HttpResponse::Ok().body(s))
 }
 
 async fn logout() -> HttpResponse {
@@ -77,17 +97,17 @@ async fn logout() -> HttpResponse {
         .finish()
 }
 
-async fn authenticate(form: web::Form<LoginForm>) -> HttpResponse {
+async fn authenticate(form: web::Form<LoginForm>) -> Result<HttpResponse, Error> {
     println!("processing authentication .... username: {}", form.username);
     if form.username == "ram" {
-        HttpResponse::SeeOther()
+        Ok(HttpResponse::SeeOther()
             .cookie(
                 Cookie::build("my_auth_cookie", "SomeValue")
                     .http_only(true) // for security
                     .finish(),
             )
             .insert_header((http::header::LOCATION, "/dashboard"))
-            .finish()
+            .finish())
     } else {
         let s = LoginForm {
             username: form.username.clone(),
@@ -96,7 +116,7 @@ async fn authenticate(form: web::Form<LoginForm>) -> HttpResponse {
         }
         .render()
         .unwrap();
-        HttpResponse::Ok().body(s)
+        Ok(HttpResponse::Ok().body(s))
     }
 }
 
@@ -105,12 +125,12 @@ async fn dashboard() -> HttpResponse {
     HttpResponse::Ok().body(s)
 }
 
-async fn users() -> HttpResponse {
+async fn users() -> Result<HttpResponse, Error> {
     let s = UsersTemplate.render().unwrap();
-    HttpResponse::Ok().body(s)
+    Ok(HttpResponse::Ok().body(s))
 }
 
-async fn user_new() -> HttpResponse {
+async fn user_new() ->  Result<HttpResponse, Error> {
     let s = NewUserTemplate.render().unwrap();
-    HttpResponse::Ok().body(s)
+    Ok(HttpResponse::Ok().body(s))
 }

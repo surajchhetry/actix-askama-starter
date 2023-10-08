@@ -9,6 +9,7 @@ actix-files = "0.6.2"
 serde = { version = "1.0.188", features = ["derive"] }
 askama = "0.12.1"
 askama_actix = "0.14.0"
+futures-util = { version = "0.3.28", features = [] }
 
 [package.metadata.askama]
 dir = "static"
